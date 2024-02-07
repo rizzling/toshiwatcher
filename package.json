@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "graphql-request": "^6.1.0",
+    "nostr-tools": "^2.1.5",
+    "websocket-polyfill": "^0.0.3"
+  }
+}
