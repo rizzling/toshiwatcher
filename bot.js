@@ -2,7 +2,7 @@ import { Relay, finalizeEvent, getPublicKey } from 'nostr-tools';
 import 'websocket-polyfill';
 import { request, gql } from 'graphql-request';
 import fs from 'fs';
-import { relayUrl, endpoint, imageUrlBase } from './config/config.js';
+import { relayUrl, sk, endpoint, imageUrlBase } from './config/config.js';
 
 const processedIdsFilePath = 'processed-activity-ids.json';
 let processedActivityIds = [];
@@ -13,7 +13,7 @@ const recentActivityQuery = gql`
       where: {
         type: { _neq: "royalty" }
       }
-      limit: 20
+      limit: 4
     ) {
       id
       type
@@ -36,7 +36,6 @@ const recentActivityQuery = gql`
   }
 `;
 
-
 function logError(error) {
     const logMessage = `[${new Date().toISOString()}] ${error}\n`;
   
@@ -56,6 +55,20 @@ async function getRecentActivities() {
   }
 }
 
+const artistListFilePath = 'artistsPubs.json';
+
+function getArtistPubKey(artistName) {
+  if (fs.existsSync(artistListFilePath)) {
+    const artistListContent = fs.readFileSync(artistListFilePath, 'utf-8');
+    const artistList = JSON.parse(artistListContent);
+
+    const artist = artistList.artists.find(a => a.name === artistName);
+    return artist ? artist.pubKey : null;
+  }
+
+  return null;
+}
+
 async function processRecentActivity(activity) {
   try {
     const { id, type, artwork } = activity;
@@ -68,20 +81,22 @@ async function processRecentActivity(activity) {
     const artistName = artwork.artist.username;
     const artworkTitle = artwork.title;
     const artworkSlug = artwork.slug;
+    const artistPubKey = getArtistPubKey(artistName);
+    const artistPubKeyText = artistPubKey ? ` Artists' Nostr Pub: ${artistPubKey}` : '';
 
     let eventText;
 
     if (type.toLowerCase() === 'creation') {
-      eventText = `${artistName} has just published the artwork "${artworkTitle}" on raretoshi.com/a/${artworkSlug}.`;
+      eventText = `${artistName} has just published the artwork "${artworkTitle}" on raretoshi.com/a/${artworkSlug}.${artistPubKeyText}`;
     } else {
       const amount = activity.amount;
       const saleAmount = amount / 100000000; // Convert Satoshis to BTC
-      eventText = `The artwork "${artworkTitle}" by ${artistName} was just sold for ${amount} Satoshis (${saleAmount}L-BTC) on raretoshi.com/a/${artworkSlug}.`;
+      eventText = `The artwork "${artworkTitle}" by ${artistName} was just sold for ${amount} Satoshis (${saleAmount}L-BTC) on raretoshi.com/a/${artworkSlug}.${artistPubKeyText}`;
     }
 
     const imageUrl = `${imageUrlBase}${artwork.filename}`;
 
-    const sk = process.env.SEC_K;
+    //const sk = process.env.SEC_K; //only cloud for production
 
     const relay = await Relay.connect(relayUrl); 
     const pk = getPublicKey(sk);
