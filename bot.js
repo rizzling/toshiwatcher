@@ -96,7 +96,7 @@ async function processRecentActivity(activity) {
 
     const imageUrl = `${imageUrlBase}${artwork.filename}`;
 
-    //const sk = process.env.SEC_K; //only cloud for production
+    const sk = process.env.SEC_K; //for production
 
     const relay = await Relay.connect(relayUrl); 
     const pk = getPublicKey(sk);
