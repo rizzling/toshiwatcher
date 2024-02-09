@@ -2,7 +2,7 @@ import { Relay, finalizeEvent, getPublicKey } from 'nostr-tools';
 import 'websocket-polyfill';
 import { request, gql } from 'graphql-request';
 import fs from 'fs';
-import { relayUrl, sk, endpoint, imageUrlBase } from './config/config.js';
+import { relayUrl, endpoint, imageUrlBase } from './config/config.js';
 
 const processedIdsFilePath = 'processed-activity-ids.json';
 let processedActivityIds = [];
