@@ -13,7 +13,7 @@ const recentActivityQuery = gql`
       where: {
         type: { _neq: "royalty" }
       }
-      limit: 4
+      limit: 20
     ) {
       id
       type
