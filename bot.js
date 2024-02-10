@@ -89,7 +89,7 @@ async function processRecentActivity(activity) {
     if (type.toLowerCase() === 'creation') {
       eventText = `${artistName} has just published the artwork "${artworkTitle}" on raretoshi.com/a/${artworkSlug}.${artistPubKeyText}`;
     } else {
-      const amount = activity.amount;
+      const amount = Math.abs(activity.amount);
       const saleAmount = amount / 100000000; // Convert Satoshis to BTC
       eventText = `The artwork "${artworkTitle}" by ${artistName} was just sold for ${amount} Satoshis (${saleAmount}L-BTC) on raretoshi.com/a/${artworkSlug}.${artistPubKeyText}`;
     }
