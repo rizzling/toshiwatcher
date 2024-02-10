@@ -1,6 +1,8 @@
 {
-    "artists": [
-      {"name": "ArtistName1", "pubKey": "ArtistNostrPubKey1"}
-    ]
-  }
-  
+  "artists": [
+    {"name": "Alex", "pubKey": "npub1p3hc2ns5vv2he2stusfms783wt34r7n79dk97ws8jz6yknn87qrqhy"},
+    {"name": "RRizzling", "pubKey": "npub1a2k5y5vkqc66vwem08m05kd48exgr9fqlk5cfjedng0qvlz6tkaqzepf3l"},
+    {"name": "Rare Pepe Physicals", "pubKey": "npub1kgwlcxrxu7tss3aw35p8rksqmycedcezsjkl4upd9pyyfkt9746sccdq9t"},
+    {"name": "Sparky1000101", "pubKey": "npub19a0g3pkmxxmuvjxa950l89m96yqc00xt55r74fsa55ecuedhrvxqy40ya9"}
+  ]
+}
